@@ -8,41 +8,48 @@ const Button = ({ text, onClick }) => {
   return <button onClick={onClick}>{text}</button>;
 };
 
-const StatisticLine = ({ text, value }) => {
+const StatisticLine = ({ text, value, sign }) => {
   return (
-    <p>
-      {text} {value}
-    </p>
+    <tr>
+      <td>{text}</td>
+      <td>
+        {value}
+        {sign}
+      </td>
+    </tr>
   );
-};
-
-const Average = ({ average }) => {
-  return <p>Average {average}</p>;
-};
-
-const Positive = ({ positive }) => {
-  return <p>Positive {positive * 100}%</p>;
 };
 
 const Statistics = ({ good, neutral, bad }) => {
   if (good + neutral + bad === 0) {
     return (
-      <div>
+      <>
         <h1>statistics</h1>
         <p>No feedback given</p>
-      </div>
+      </>
     );
   }
   return (
-    <div>
+    <>
       <h1>statistics</h1>
-      <StatisticLine text={"good"} value={good} />
-      <StatisticLine text={"neutral"} value={neutral} />
-      <StatisticLine text={"bad"} value={bad} />
-      <StatisticLine text={"all"} value={good + bad + neutral} />
-      <Average average={(good - bad) / (good + bad + neutral)} />
-      <Positive positive={good / (good + bad + neutral)} />
-    </div>
+      <table>
+        <tbody>
+          <StatisticLine text={"good"} value={good} />
+          <StatisticLine text={"neutral"} value={neutral} />
+          <StatisticLine text={"bad"} value={bad} />
+          <StatisticLine text={"all"} value={good + bad + neutral} />
+          <StatisticLine
+            text={"average"}
+            value={(good - bad) / (good + bad + neutral)}
+          />
+          <StatisticLine
+            text={"positive"}
+            value={good / (good + bad + neutral)}
+            sign={"%"}
+          />
+        </tbody>
+      </table>
+    </>
   );
 };
 
@@ -63,17 +70,29 @@ const App = () => {
   };
 
   return (
-    <div>
+    <>
       <Header />
-      <Button text={"good"} onClick={increaseGood} />
-      <Button text={"neutral"} onClick={increaseNeutral} />
-      <Button text={"bad"} onClick={increaseBad} />
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <Button text={"good"} onClick={increaseGood} />
+            </td>
+            <td>
+              <Button text={"neutral"} onClick={increaseNeutral} />
+            </td>
+            <td>
+              <Button text={"bad"} onClick={increaseBad} />
+            </td>
+          </tr>
+          <StatisticLine text={"all"} value={good + neutral + bad} />
+        </tbody>
+      </table>
 
-      <StatisticLine text={"all"} value={good + neutral + bad} />
       {/* <Average average={(good - bad) / all} />
         <Positive positive={(good / all) * 100} /> */}
       <Statistics good={good} neutral={neutral} bad={bad} />
-    </div>
+    </>
   );
 };
 
