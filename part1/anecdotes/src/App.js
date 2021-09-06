@@ -15,7 +15,17 @@ const App = () => {
     Math.floor(Math.random() * anecdotes.length)
   );
 
+  const [points, setPoints] = useState(
+    Array.apply(null, new Array(7)).map(Number.prototype.valueOf, 0)
+  );
+
   const getRandom = () => Math.floor(Math.random() * anecdotes.length);
+
+  const castVote = () => {
+    const copy = [...points];
+    copy[selected] += 1;
+    setPoints(copy);
+  };
 
   return (
     <>
@@ -26,6 +36,8 @@ const App = () => {
           </tr>
           <tr>
             <td>
+              <button onClick={() => castVote()}>Vote</button>
+
               <button onClick={() => setSelected(getRandom())}>
                 next anecdote
               </button>
