@@ -19,8 +19,20 @@ const App = () => {
 
   return (
     <>
-      {anecdotes[selected]}
-      <button onClick={() => setSelected(getRandom())}>next anecdote</button>
+      <table>
+        <tbody>
+          <tr>
+            <td>{anecdotes[selected]}</td>
+          </tr>
+          <tr>
+            <td>
+              <button onClick={() => setSelected(getRandom())}>
+                next anecdote
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </>
   );
 };
