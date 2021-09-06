@@ -21,6 +21,14 @@ const App = () => {
 
   const getRandom = () => Math.floor(Math.random() * anecdotes.length);
 
+  const getMax = () => {
+    const max = Math.max.apply(
+      Math,
+      points.map((i) => i)
+    );
+    return points.indexOf(max);
+  };
+
   const castVote = () => {
     const copy = [...points];
     copy[selected] += 1;
@@ -32,6 +40,11 @@ const App = () => {
       <table>
         <tbody>
           <tr>
+            <td>
+              <h1>Anecdote of the day</h1>
+            </td>
+          </tr>
+          <tr>
             <td>{anecdotes[selected]}</td>
           </tr>
           <tr>
@@ -42,6 +55,14 @@ const App = () => {
                 next anecdote
               </button>
             </td>
+          </tr>
+          <tr>
+            <td>
+              <h1>Anecdote with most votes</h1>
+            </td>
+          </tr>
+          <tr>
+            <td>{anecdotes[getMax()]}</td>
           </tr>
         </tbody>
       </table>
