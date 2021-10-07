@@ -23,6 +23,7 @@ const Content = ({ parts }) => {
 };
 
 const Total = ({ parts }) => {
+  //2.3
   const sum = parts
     .map((part) => part.exercises)
     .reduce((prev, curr) => prev + curr, 0);
