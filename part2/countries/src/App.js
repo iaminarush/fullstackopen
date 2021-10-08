@@ -23,18 +23,49 @@ const CountryList = ({ countries, filter }) => {
         <Details country={filteredCountries[0]} />
       ) : (
         filteredCountries.map((filteredCountry) => (
-          <p key={filteredCountry.name.common}>{filteredCountry.name.common}</p>
+          <CountryRow
+            key={filteredCountry.name.common}
+            country={filteredCountry}
+          />
         ))
       )}
     </>
   );
 };
 
+const CountryRow = ({ country }) => {
+  const [showDetails, setShowDetails] = useState(false);
+
+  const handleClick = () => {
+    setShowDetails(!showDetails);
+  };
+
+  return (
+    <>
+      <div style={{ whiteSpace: "nowrap" }}>
+        <p style={{ display: "inline-block" }}>{country.name.common}</p>
+        <button onClick={handleClick} style={{ display: "inline-block" }}>
+          {showDetails ? "hide" : "show"}
+        </button>
+      </div>
+
+      {showDetails ? (
+        <div>
+          <Details country={country} />
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
+  );
+};
+
 const Details = ({ country }) => {
+  console.log(country);
   return (
     <>
       <h3>{country.name.common}</h3>
-      <p>capital {country.capital[0]}</p>
+      <p>capital {country?.capital[0]}</p>
       <p>population {country.population}</p>
       <h4>Languages</h4>
       <ul>
