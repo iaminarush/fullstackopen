@@ -61,7 +61,6 @@ const CountryRow = ({ country }) => {
 };
 
 const Details = ({ country }) => {
-  console.log(country);
   return (
     <>
       <h3>{country.name.common}</h3>
@@ -74,7 +73,56 @@ const Details = ({ country }) => {
         ))}
       </ul>
       <img src={country.flags.png} alt="Country's flag" />
+      <Weather capital={country?.capital[0]} />
     </>
+  );
+};
+
+const Weather = ({ capital }) => {
+  const [weather, setWeather] = useState();
+
+  const params = {
+    access_key: process.env.REACT_APP_WEATHER_API_KEY,
+    query: capital,
+  };
+
+  useEffect(() => {
+    let isCancel = false;
+
+    axios
+      .get("http://api.weatherstack.com/current", { params })
+      .then((response) => {
+        if (!isCancel) {
+          setWeather(response.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return () => {
+      isCancel = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(weather);
+  }, [weather]);
+
+  return weather ? (
+    <>
+      <h4>Weather</h4>
+      <p>
+        <b>temperature: </b>
+        {weather.current.temperature} Celcius
+      </p>
+      <img src={weather.current.weather_icons[0]} alt="Weather icon" />
+      <p>
+        <b>wind: </b>
+        {weather.current.wind_speed} kph direction {weather.current.wind_dir}
+      </p>
+    </>
+  ) : (
+    <></>
   );
 };
 
