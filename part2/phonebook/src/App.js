@@ -35,7 +35,7 @@ const Phonebook = ({ persons, filter, handleDelete }) => {
           person.name.toLowerCase().includes(filter.toLowerCase())
         )
         .map((filteredPerson) => (
-          <p key={filteredPerson.name}>
+          <p key={filteredPerson.id}>
             {filteredPerson.name} {filteredPerson.number}{" "}
             <button onClick={() => handleDelete(filteredPerson)}>delete</button>
           </p>
@@ -80,8 +80,21 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (persons.some((person) => person.name === newName)) {
-      return window.alert(`${newName} is already added to phonebook`);
+    let obj = persons.find((person) => person.name === newName);
+    if (obj) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        obj.number = newNumber;
+        personService.updatePerson(obj).then(() => {
+          setPersons(
+            persons.map((person) => (person.id !== obj.id ? person : obj))
+          );
+        });
+      }
+      return;
     }
     const nameObject = {
       name: newName,
@@ -112,8 +125,6 @@ const App = () => {
         filter={filter}
         handleDelete={handleDelete}
       />
-
-      <div>debug: {newName}</div>
     </div>
   );
 };
