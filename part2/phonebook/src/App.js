@@ -97,13 +97,24 @@ const App = () => {
         )
       ) {
         obj.number = newNumber;
-        personService.updatePerson(obj).then(() => {
-          setPersons(
-            persons.map((person) => (person.id !== obj.id ? person : obj))
-          );
-          setNotificationType("notification");
-          setNotificationMessage(`Updated ${obj.name}`);
-        });
+        personService
+          .updatePerson(obj)
+          .then(() => {
+            setPersons(
+              persons.map((person) => (person.id !== obj.id ? person : obj))
+            );
+            setNotificationType("notification");
+            setNotificationMessage(`Updated ${obj.name}`);
+          })
+          .catch((error) => {
+            setNotificationType("error");
+            setNotificationMessage(
+              `Information of ${obj.name} has already been removed from server`
+            );
+            setTimeout(() => {
+              setNotificationMessage(null);
+            }, 5000);
+          });
       }
       return;
     }
