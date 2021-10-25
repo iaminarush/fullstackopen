@@ -44,11 +44,20 @@ const Phonebook = ({ persons, filter, handleDelete }) => {
   );
 };
 
+const Notification = ({ message, type }) => {
+  if (message === null) {
+    return null;
+  }
+  return <div className={type}>{message}</div>;
+};
+
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [notificationType, setNotificationType] = useState("");
 
   useEffect(() => {
     personService.getAll().then((response) => {
@@ -92,6 +101,8 @@ const App = () => {
           setPersons(
             persons.map((person) => (person.id !== obj.id ? person : obj))
           );
+          setNotificationType("notification");
+          setNotificationMessage(`Updated ${obj.name}`);
         });
       }
       return;
@@ -104,12 +115,18 @@ const App = () => {
       setPersons(persons.concat(response.data));
       setNewName("");
       setNewNumber("");
+      setNotificationType("notification");
+      setNotificationMessage(`Added ${newName}`);
+      setTimeout(() => {
+        setNotificationMessage(null);
+      }, 5000);
     });
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} type={notificationType} />
       <Filter value={filter} onChange={handleFilterChange} />
       <Form
         handleSubmit={handleSubmit}
