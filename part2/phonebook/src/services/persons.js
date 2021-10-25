@@ -5,9 +5,13 @@ const getAll = () => {
   return axios.get(baseUrl);
 };
 
-const create = (newObject) => {
+const createPerson = (newObject) => {
   return axios.post(baseUrl, newObject);
 };
 
-const personService = { getAll, create };
+const deletePerson = (id) => {
+  return axios.delete(`${baseUrl}/${id}`);
+};
+
+const personService = { getAll, createPerson, deletePerson };
 export default personService;

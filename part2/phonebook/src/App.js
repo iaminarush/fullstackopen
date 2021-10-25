@@ -27,7 +27,7 @@ const Form = (props) => {
   );
 };
 
-const Phonebook = ({ persons, filter }) => {
+const Phonebook = ({ persons, filter, handleDelete }) => {
   return (
     <>
       {persons
@@ -36,7 +36,8 @@ const Phonebook = ({ persons, filter }) => {
         )
         .map((filteredPerson) => (
           <p key={filteredPerson.name}>
-            {filteredPerson.name} {filteredPerson.number}
+            {filteredPerson.name} {filteredPerson.number}{" "}
+            <button onClick={() => handleDelete(filteredPerson)}>delete</button>
           </p>
         ))}
     </>
@@ -67,6 +68,16 @@ const App = () => {
     setFilter(e.target.value);
   };
 
+  const handleDelete = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService.deletePerson(person.id).then(() => {
+        setPersons(
+          persons.filter((filterPerson) => person.id !== filterPerson.id)
+        );
+      });
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (persons.some((person) => person.name === newName)) {
@@ -76,7 +87,7 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    personService.create(nameObject).then((response) => {
+    personService.createPerson(nameObject).then((response) => {
       setPersons(persons.concat(response.data));
       setNewName("");
       setNewNumber("");
@@ -96,7 +107,11 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Phonebook persons={persons} filter={filter} />
+      <Phonebook
+        persons={persons}
+        filter={filter}
+        handleDelete={handleDelete}
+      />
 
       <div>debug: {newName}</div>
     </div>
