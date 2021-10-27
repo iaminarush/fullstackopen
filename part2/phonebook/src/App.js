@@ -89,7 +89,7 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let obj = persons.find((person) => person.name === newName);
+    let obj = Object.create(persons.find((person) => person.name === newName));
     if (obj) {
       if (
         window.confirm(
@@ -99,9 +99,11 @@ const App = () => {
         obj.number = newNumber;
         personService
           .updatePerson(obj)
-          .then(() => {
+          .then((response) => {
             setPersons(
-              persons.map((person) => (person.id !== obj.id ? person : obj))
+              persons.map((person) =>
+                person.id !== response.data.id ? person : response.data
+              )
             );
             setNotificationType("notification");
             setNotificationMessage(`Updated ${obj.name}`);
